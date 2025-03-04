@@ -14,6 +14,7 @@ PFont Font1;
 //images
 PImage Ball;
 PImage Field;
+PImage Goal;
 PImage Jersey;
 
 //modes
@@ -24,7 +25,7 @@ final int PAUSE = 3;
 final int GAMEOVER = 4;
 
 //player variables
-float Player1x, Player1y, Player1d, Player2x, Player2y, Player2d;
+float Player1x, Player1y, Player1yGoalie, Player1d, Player2x, Player2y, Player2yGoalie, Player2d;
 
 //ball variables
 float ballx, bally, balld, vx, vy;
@@ -58,6 +59,8 @@ void setup () {
   //images
   Ball = loadImage("Ball.png");
   Field = loadImage("Field.png");
+  Field.resize(1000, 700);
+  Goal = loadImage("Goal.png");
   Jersey = loadImage("Jersey.png");
 
   initialize();

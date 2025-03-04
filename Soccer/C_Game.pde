@@ -6,9 +6,10 @@ void game() {
 
   background(white);
 
-  Background();
+  field();
   players();
   ball();
+  goals();
   score();
   pauseButton();
   clock();
@@ -24,37 +25,66 @@ void gameClicks() {
 }
 
 void players() {
+  //red players
   stroke(black);
   strokeWeight(3);
   fill(red);
   circle(Player1x, Player1y, Player1d);
+  circle(100, Player1yGoalie, Player1d);
 
+  //red player
   pushMatrix();
   translate(Player1x, Player1y);
   scale(0.15);
   image(Jersey, 0, 0);
   popMatrix();
 
+  //red player goalie
+  pushMatrix();
+  translate(100, Player1yGoalie);
+  scale(0.15);
+  image(Jersey, 0, 0);
+  popMatrix();
+
+  //blue players
   fill(blue);
   circle(Player2x, Player2y, Player2d);
+  circle(900, Player2yGoalie, Player2d);
 
+  //blue player
   pushMatrix();
   translate(Player2x, Player2y);
   scale(0.14);
   image(Jersey, 0, 0);
   popMatrix();
 
+  //blue player goalie
+  pushMatrix();
+  translate(900, Player2yGoalie);
+  scale(0.14);
+  translate(0, 0);
+  image(Jersey, 0, 0);
+  popMatrix();
+
   //player 1 controls
-  if (wkey == true && Player1y > 55) Player1y = Player1y - 5;
-  if (skey == true && Player1y < 645) Player1y = Player1y + 5;
-  if (akey == true && Player1x > 30) Player1x = Player1x - 5;
-  if (dkey == true && Player1x < 970) Player1x = Player1x + 5;
+  if (wkey == true && Player1y > 50+Player1d/2) Player1y = Player1y - 5;
+  if (skey == true && Player1y < 650-Player1d/2) Player1y = Player1y + 5;
+  if (akey == true && Player1x > 50+Player1d/2) Player1x = Player1x - 5;
+  if (dkey == true && Player1x < 950-Player1d/2) Player1x = Player1x + 5;
+
+  //player 1 goalie controls
+  if (wkey == true && Player1y > 265 && Player1y < 435) Player1yGoalie = Player1yGoalie - 5;
+  if (skey == true && Player1y < 435 && Player1y > 265) Player1yGoalie = Player1yGoalie + 5;
 
   //player 2 controls
-  if (upkey == true && Player2y > 55) Player2y = Player2y - 5;
-  if (downkey == true && Player2y < 645) Player2y = Player2y + 5;
-  if (leftkey == true && Player2x > 30) Player2x = Player2x - 5;
-  if (rightkey == true && Player2x < 970) Player2x = Player2x + 5;
+  if (upkey == true && Player2y > 50+Player1d/2) Player2y = Player2y - 5;
+  if (downkey == true && Player2y < 650-Player1d/2) Player2y = Player2y + 5;
+  if (leftkey == true && Player2x > 50+Player1d/2) Player2x = Player2x - 5;
+  if (rightkey == true && Player2x < 950-Player1d/2) Player2x = Player2x + 5;
+
+  //player 2 goalie controls
+  if (upkey == true && Player2y > 265 && Player2y < 435) Player2yGoalie = Player2yGoalie - 5;
+  if (downkey == true && Player2y < 435 && Player2y > 265) Player2yGoalie = Player2yGoalie + 5;
 }
 
 void ball() {
@@ -79,29 +109,37 @@ void ball() {
   vy *= 0.97;
 
   // Bounce off walls
-  if (bally <= balld/2 + 20) {
+
+  //top wall
+  if (bally <= balld/2 + 50) {
     vy *= -1;
-    bally = balld/2 + 21;
+    bally = balld/2 + 51;
   }
-  if (bally >= height - balld/2 - 20) {
+
+  //bottom wall
+  if (bally >= height - balld/2 - 50) {
     vy *= -1;
-    bally = height - balld/2 - 21;
+    bally = height - balld/2 - 51;
   }
-  if (ballx <= balld/2 && bally >= 435) {
+
+  //left wall
+  if (ballx <= balld/2 + 50 && bally >= 435) {
     vx *= -1;
-    ballx = balld/2 + 1;
+    ballx = balld/2 + 51;
   }
-  if (ballx <= balld/2 && bally <= 265) {
+  if (ballx <= balld/2 + 50 && bally <= 265) {
     vx *= -1;
-    ballx = balld/2 + 1;
+    ballx = balld/2 + 51;
   }
-  if (ballx >= width - balld/2 && bally >= 435) {
+
+  //right wall
+  if (ballx >= width - balld/2 - 50 && bally >= 435) {
     vx *= -1;
-    ballx = width - balld/2 - 1;
+    ballx = width - balld/2 - 51;
   }
-  if (ballx >= width - balld/2 && bally <= 265) {
+  if (ballx >= width - balld/2 - 50 && bally <= 265) {
     vx *= -1;
-    ballx = width - balld/2 - 1;
+    ballx = width - balld/2 - 51;
   }
 
   //ball bounce off of players
@@ -113,6 +151,17 @@ void ball() {
   if (dist (Player2x, Player2y, ballx, bally) <= Player2d/2 + balld/2) {
     vx = (ballx - Player2x)/7;
     vy = (bally - Player2y)/7;
+  }
+
+  //ball bounce off goalies
+  if (dist (100, Player1yGoalie, ballx, bally) <= Player1d/2 + balld/2) {
+    vx = (ballx - 100)/7;
+    vy = (bally - Player1yGoalie)/7;
+  }
+
+  if (dist (900, Player2yGoalie, ballx, bally) <= Player2d/2 + balld/2) {
+    vx = (ballx - 900)/7;
+    vy = (bally - Player2yGoalie)/7;
   }
 }
 
@@ -151,10 +200,9 @@ void score() {
   }
 }
 
-void Background() {
+void field() {
   pushMatrix();
   translate(500, 350);
-  scale(0.95);
   image(Field, 0, 0);
   popMatrix();
 }
@@ -198,4 +246,17 @@ void clock() {
   textSize(25);
   fill(black);
   text("Time Left: " + timeLeft, 500, 680);
+}
+
+void goals() {
+  pushMatrix();
+  translate(20, 350);
+  image(Goal, 0, 0);
+  popMatrix();
+  
+  pushMatrix();
+  translate(width-20, 350);
+  rotate(PI);
+  image(Goal, 0, 0);
+  popMatrix();
 }

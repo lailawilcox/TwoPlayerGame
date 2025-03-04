@@ -10,12 +10,14 @@ void tactile(float x, float y, float w, float h, int on, int off) {
 
 void initialize() {
   //initialize paddles
-  Player1x = 80;
+  Player1x = 400;
   Player1y = height/2;
+  Player1yGoalie = height/2;
   Player1d = 60;
 
-  Player2x = width-80;
+  Player2x = width-400;
   Player2y = height/2;
+  Player2yGoalie = height/2;
   Player2d = 60;
 
   //initialize ball
@@ -36,6 +38,6 @@ void initialize() {
   timeLeft = totalTime = 60;
   lastUpdateTime = millis();
   gameRunning = false;
-  
+
   gameInProgress = false;
 }
